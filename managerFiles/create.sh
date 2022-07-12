@@ -22,8 +22,8 @@ function ceate_new_project() {
     mkdir $repo/src
     # Install files
     mkdir $repo/install
-    cp $(dirname "$currentFolder")/install/setup
-    chmod +x $repo/tests/runTests
+    cp $(dirname "$currentFolder")/install/setup $repo/install/setup
+    chmod +x $repo/tests/install/setup
     touch $repo/install/requirements.txt
     touch $repo/install/linux.txt
     touch $repo/install/system.txt
@@ -34,7 +34,7 @@ function ceate_new_project() {
     cp $(dirname "$currentFolder")/update/liveUpdateReboot.sh $repo/vupdate/liveUpdatePull.sh
     chmod +x $repo/update/liveUpdatePull.sh
     chmod +x $repo/update/liveUpdatePull.sh
-    chmod +x $repo/vupdate/liveUpdatePull.sh
+    chmod +x $repo/update/liveUpdatePull.sh
     # Initial Commit to repo
     cd $repo && git init
     git remote add origin git@github.com:$gitUser/$repo.git

@@ -1,0 +1,67 @@
+#!/bin/bash
+source "$(realpath "$0" | sed 's|\(.*\)/.*|\1|')/managerFiles/create.sh"
+source "$(realpath "$0" | sed 's|\(.*\)/.*|\1|')/managerFiles/update.sh"
+source "$(realpath "$0" | sed 's|\(.*\)/.*|\1|')/managerFiles/install.sh"
+source "$(realpath "$0" | sed 's|\(.*\)/.*|\1|')/managerFiles/test.sh"
+
+function print_help() {
+  echo "-c create creates a new project 'manager -c <server> (git/bitbucket) <repo name> <private> ([y/Y]es/[n/N]o)'"
+  echo "-nb new-branch creates new branch for current project 'manager -nb <branch name>'"
+  echo "-u update pushes changes to current branch 'manager -u <commit message>'"
+  echo "-gl go-live pushes/merges changes to master"
+  echo "type ['minor', 'dependants', 'reboot']'"
+  echo "'manager -gl <commit message> <type>'"
+  echo "-sb swtiches branch 'manager -sb <branch>'"
+  echo "-db delete-branch deletes repo 'manager -db <branch>'"
+  echo "tests string of test names seperated by whitespace or 'all' to run all tests"
+  echo "-t test 'manager -t <tests>'"
+  echo "-i install"
+  echo "  options"
+  echo "    -r repository"
+  echo "    -p python"
+  echo "    -n node"
+  echo "    -s system"
+  echo "    -g git"
+  echo "  'manager -i <type of package> <package name>'"
+}
+
+case $1 in
+
+    -h | help | "")
+      print_help
+      exit 2
+    ;;
+    
+    -c | create )
+        if [ $2 == "" ]
+        then
+          echo "Please give a project name"
+          exit 2
+        fi
+        create_new_project $2 $3 $4
+    ;;
+    
+    -nb | new-branch )
+      create_new_branch $2
+    ;;
+    
+    -u | update )
+      update $2
+    ;;
+
+    -sb | switch-branch )
+      switch_branch $2
+    ;;
+    
+    -db | delete-branch )
+      delete_branch $2
+    ;;
+    
+    -i | install )
+      install $2 $3
+    ;;
+    
+    -t | test )
+      test $2
+    ;;
+esac

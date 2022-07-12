@@ -1,0 +1,11 @@
+if [[ -f "test.py" ]]; then
+    #install pip3
+   python3 test.py
+fi
+if [[ -f "test.js" ]]; then
+    node test.js
+fi
+if [[ -f "tests.c" ]]; then
+    gcc -o tests tests.c
+    ./tests
+fi

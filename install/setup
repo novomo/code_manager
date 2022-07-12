@@ -1,0 +1,54 @@
+#!/bin/bash
+#update os
+sudo apt update -y
+#install git
+sudo apt-get install git
+
+
+#install c++
+sudo apt install -y g++
+#install mpi
+sudo apt-get -y install mpich
+
+#get linux repo
+
+while IFS="" read -r p || [ -n "$p" ]
+do
+  sudo add-apt-repository $p
+done < install/linux-repos.txt
+#update os
+sudo apt update -y
+#install os packages
+while IFS="" read -r p || [ -n "$p" ]
+do
+  sudo apt install -y $p
+done < system.txt
+#install python packages
+if [[ -f "install/requirements.txt" ]]; then
+    #install pip3
+    sudo apt install -y python3-pip
+    pip3 install -r requirements.txt
+fi
+#install node modules
+if [[ -f "package.json" ]]; then
+    #install node
+    curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh
+    sudo bash nodesource_setup.sh
+    sudo apt-get update
+    sudo apt-get install nodejs
+    npm install -g yarn
+    yarn install
+fi
+
+for f in *; do
+    if [[ -d "$f" && ! -L "$f" ]]; then
+        cd $f && git checkout master
+        git branch --set-upstream-to=origin/master master
+        git pull
+        cd ..
+    fi
+done
+
+if [[ -f "makefile" ]]; then
+    make
+fi
