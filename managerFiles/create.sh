@@ -1,18 +1,18 @@
 #!/bin/bash
 source "$(realpath "$0" | sed 's|\(.*\)/.*|\1|')/secrets.sh"
 
-function ceate_new_project() {
+function create_new_project() {
     repo=$1
     private=$2
     # create repo on github
-    if [["$private" =~ ^([yY][eE][sS]|[yY])$]]; then    curl
-        curl -H "Authorization: token $gitAccessToken" -d '{"name": "'"$repo"'", "auto_init": true, "private": true}' https://api.github.com/user/repos #this will create the repo in github.
+    if [[ "$private" =~ ^([yY][eE][sS]|[yY])$ ]]; then    curl
+        curl -H "Authorization: token $gitAccessToken" -d '{"name": "'"$repo"'", "auto_init": true, "private": true}' https://api.github.com/user/repos 
     else
         curl -H "Authorization: token $gitAccessToken" -d '{"name": "'"$repo"'", "auto_init": true, "private": false}' https://api.github.com/user/repos
     fi
 
     # assign current working folder to constant
-    currentFolder = $(realpath "$0" | sed 's|\(.*\)/.*|\1|')
+    currentFolder="$(realpath "$0" | sed 's|\(.*\)/.*|\1|')/code_manager"
     # Create and copy all needed files inrepo
     mkdir $repo 
     touch $repo/README.md
@@ -23,22 +23,23 @@ function ceate_new_project() {
     # Install files
     mkdir $repo/install
     cp $(dirname "$currentFolder")/install/setup $repo/install/setup
-    chmod +x $repo/tests/install/setup
+    chmod +x $repo/install/setup
     touch $repo/install/requirements.txt
     touch $repo/install/linux.txt
     touch $repo/install/system.txt
     cp $(dirname "$currentFolder")/.gitignore $repo/.gitignore
     # update files
-    cp $(dirname "$currentFolder")/update/liveUpdatePull.sh $repo/update/liveUpdatePull.sh
-    cp $(dirname "$currentFolder")/update/liveUpdateReinstall.sh $repo/update/liveUpdatePull.sh
-    cp $(dirname "$currentFolder")/update/liveUpdateReboot.sh $repo/vupdate/liveUpdatePull.sh
-    chmod +x $repo/update/liveUpdatePull.sh
-    chmod +x $repo/update/liveUpdatePull.sh
-    chmod +x $repo/update/liveUpdatePull.sh
+    #cp $(dirname "$currentFolder")/update/liveUpdatePull.sh $repo/update/liveUpdatePull.sh
+    #cp $(dirname "$currentFolder")/update/liveUpdateReinstall.sh $repo/update/liveUpdatePull.sh
+    #cp $(dirname "$currentFolder")/update/liveUpdateReboot.sh $repo/vupdate/liveUpdatePull.sh
+    #chmod +x $repo/update/liveUpdatePull.sh
+    #chmod +x $repo/update/liveUpdatePull.sh
+    #chmod +x $repo/update/liveUpdatePull.sh
     # Initial Commit to repo
     cd $repo && git init
     git remote add origin git@github.com:$gitUser/$repo.git
     git add .
     git commit -m "feat: Initial commit of project structure, license, and readme."
-    git push -u origin master
+
+    git push -u origin main
 }

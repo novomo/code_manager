@@ -5,7 +5,7 @@ source "$(realpath "$0" | sed 's|\(.*\)/.*|\1|')/managerFiles/install.sh"
 source "$(realpath "$0" | sed 's|\(.*\)/.*|\1|')/managerFiles/test.sh"
 
 function print_help() {
-  echo "-c create creates a new project 'manager -c <server> (git/bitbucket) <repo name> <private> ([y/Y]es/[n/N]o)'"
+  echo "-c create creates a new project 'manager -c <repo name> <private> ([y/Y]es/[n/N]o)'"
   echo "-nb new-branch creates new branch for current project 'manager -nb <branch name>'"
   echo "-u update pushes changes to current branch 'manager -u <commit message>'"
   echo "-gl go-live pushes/merges changes to master"
